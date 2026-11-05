@@ -225,7 +225,7 @@ def invertibleDirectImageToHilbert :
         restriction.unop coefficient.2)
     letI := IsInvertibleDirectImage.isIso_pushforwardBaseChange
       (sourceScheme ↘ Spec (.of baseField)) restriction.unop coefficient.2
-    exact ULift.ext _ _ (Subtype.ext
+    exact ULift.ext (Subtype.ext
       (comap_zeroLocus_directImageCounit (sourceScheme ↘ Spec (.of baseField))
         restriction.unop coefficient.1.1).symm)
 

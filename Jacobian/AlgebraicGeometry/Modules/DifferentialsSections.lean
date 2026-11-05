@@ -49,7 +49,7 @@ lemma sectionsD_map {U V : X.Opens} (h : V ≤ U) (a : Γ(X, U)) :
 
 lemma sectionsD_specStructureMap (U : X.Opens) (r : R) :
     g.sectionsD U (g.specStructureMap U r) = 0 := by
-  have h := PresheafOfModules.Derivation'.d_app_app g.relativeDifferentialsDerivation ⊤
+  have h := PresheafOfModulesOfCommRing.Derivation'.d_app_app g.relativeDifferentialsDerivation ⊤
     ((Scheme.ΓSpecIso R).inv r)
   have h' := g.sectionsD_map (le_top : U ≤ g ⁻¹ᵁ ⊤) (g.app ⊤ ((Scheme.ΓSpecIso R).inv r))
   have e : g.specStructureMap U r =

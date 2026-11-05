@@ -21,7 +21,7 @@ variable (σ : Type*) (R : Type*) [CommRing R]
 /-- Constants identify the coefficient ring with the degree-zero ring. -/
 noncomputable def homogeneousSubmoduleZeroEquiv : R ≃+* homogeneousSubmodule σ R 0 where
   toFun r := ⟨C r, isHomogeneous_C σ r⟩
-  invFun p := coeff 0 (p : MvPolynomial σ R)
+  invFun p := (p : MvPolynomial σ R).coeff 0
   left_inv r := by simp
   right_inv p := Subtype.ext
     (totalDegree_eq_zero_iff_eq_C.mp ((totalDegree_zero_iff_isHomogeneous _).mpr p.2)).symm

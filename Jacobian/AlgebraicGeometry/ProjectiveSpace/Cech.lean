@@ -102,6 +102,10 @@ private lemma cechDifferential_eq_of_projections
 
 namespace AlgebraicGeometry.Proj
 
+local instance (R : Type (max u v)) [Ring R] :
+    HasProducts.{v} (ModuleCat.{max u v} R) :=
+  fun _ ↦ ModuleCat.hasLimitsOfShape
+
 open Scheme.Modules Opposite MvPolynomial
 
 attribute [local instance] MvPolynomial.gradedAlgebra
@@ -308,7 +312,7 @@ lemma supportedEquivFinsupp_monomialCechComplex_d (p : ℕ)
   congr 1
   by_cases he : e.1 ∈ laurentExponents (Set.range (τ ∘ i.succAbove)) m
   · rw [show e = Set.inclusion (laurentExponents_mono (Set.range_comp_subset_range _ _) m)
-        ⟨e.1, he⟩ from rfl, Finsupp.mapDomain_apply (Set.inclusion_injective _),
+        ⟨e.1, he⟩ from rfl, Finsupp.mapDomain_apply_of_injective (Set.inclusion_injective _),
       supportedEquivFinsupp_apply]
   · rw [Finsupp.mapDomain_of_notMem_range _ _ fun ⟨e', he'⟩ ↦ he (he' ▸ e'.2)]
     exact ProjectiveSpace.MonomialCechCochain.coeff_eq_zero_of_notMem c _ he

@@ -22,17 +22,6 @@ namespace CategoryTheory.NatTrans
 variable {C : Type u₁} {D : Type u₂} [Category.{v₁} C] [Category.{v₂} D]
   [Preadditive C] [Preadditive D]
 
-/-- The natural transformation `F.mapHomotopyCategoryPlus ⟶ G.mapHomotopyCategoryPlus`
-induced by a natural transformation `τ : F ⟶ G` of additive functors. It is the
-transformation `NatTrans.mapHomotopyCategory τ` of the ambient homotopy categories,
-lifted through the fully faithful inclusion of the bounded below subcategory. -/
-noncomputable def mapHomotopyCategoryPlus
-    {F G : C ⥤ D} [F.Additive] [G.Additive] (τ : F ⟶ G) :
-    F.mapHomotopyCategoryPlus ⟶ G.mapHomotopyCategoryPlus :=
-  ((HomotopyCategory.plus D).fullyFaithfulι.whiskeringRight (HomotopyCategory.Plus C)).preimage
-    (Functor.whiskerLeft (HomotopyCategory.Plus.ι C)
-      (NatTrans.mapHomotopyCategory τ (ComplexShape.up ℤ)))
-
 /-- The components of `NatTrans.mapHomotopyCategoryPlus τ`, viewed in the ambient homotopy
 category, are those of `NatTrans.mapHomotopyCategory τ`. -/
 @[simp]
@@ -44,32 +33,6 @@ lemma ι_map_mapHomotopyCategoryPlus_app {F G : C ⥤ D} [F.Additive] [G.Additiv
     (HomotopyCategory.Plus C)).map_preimage (X := F.mapHomotopyCategoryPlus)
       (Y := G.mapHomotopyCategoryPlus) (Functor.whiskerLeft (HomotopyCategory.Plus.ι C)
         (NatTrans.mapHomotopyCategory τ (ComplexShape.up ℤ)))) K
-
-@[simp]
-lemma mapHomotopyCategoryPlus_id (F : C ⥤ D) [F.Additive] :
-    NatTrans.mapHomotopyCategoryPlus (𝟙 F) = 𝟙 F.mapHomotopyCategoryPlus := by
-  rw [NatTrans.mapHomotopyCategoryPlus, NatTrans.mapHomotopyCategory_id (ComplexShape.up ℤ),
-    Functor.whiskerLeft_id']
-  exact ((HomotopyCategory.plus D).fullyFaithfulι.whiskeringRight
-    (HomotopyCategory.Plus C)).preimage_id
-
-@[reassoc, simp]
-lemma mapHomotopyCategoryPlus_comp {F G H : C ⥤ D}
-    [F.Additive] [G.Additive] [H.Additive] (τ : F ⟶ G) (σ : G ⟶ H) :
-    NatTrans.mapHomotopyCategoryPlus (τ ≫ σ) =
-      NatTrans.mapHomotopyCategoryPlus τ ≫ NatTrans.mapHomotopyCategoryPlus σ := by
-  have h : Functor.whiskerLeft (HomotopyCategory.Plus.ι C)
-        (NatTrans.mapHomotopyCategory (τ ≫ σ) (ComplexShape.up ℤ)) =
-      Functor.whiskerLeft (HomotopyCategory.Plus.ι C)
-          (NatTrans.mapHomotopyCategory τ (ComplexShape.up ℤ)) ≫
-        Functor.whiskerLeft (HomotopyCategory.Plus.ι C)
-          (NatTrans.mapHomotopyCategory σ (ComplexShape.up ℤ)) := by
-    rw [NatTrans.mapHomotopyCategory_comp (ComplexShape.up ℤ)]
-    rfl
-  rw [NatTrans.mapHomotopyCategoryPlus, NatTrans.mapHomotopyCategoryPlus,
-    NatTrans.mapHomotopyCategoryPlus, h]
-  exact ((HomotopyCategory.plus D).fullyFaithfulι.whiskeringRight
-    (HomotopyCategory.Plus C)).preimage_comp (Y := G.mapHomotopyCategoryPlus) _ _
 
 /-- `NatTrans.mapHomotopyCategoryPlus` sends a right unitor to the identity. -/
 @[simp]

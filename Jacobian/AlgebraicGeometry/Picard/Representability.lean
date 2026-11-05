@@ -78,7 +78,7 @@ private theorem small_picard (scheme : Scheme.{u}) : Small.{u} scheme.Pic := by
       exact ⟨⟨openSubset, ⟨(Modules.restrictFunctorIsoPullback openSubset.ι).app moduleSheaf ≪≫
         Modules.pullbackIotaUnitIsoOfOverIso trivialization⟩⟩, membership⟩
     · have componentEquality := equality =≫ Pi.π _ chart.1
-      simp only [Category.assoc, Pi.lift_π, embedding, dif_pos chart.2] at componentEquality
+      simp only [Category.assoc, Pi.lift_comp_π, embedding, dif_pos chart.2] at componentEquality
       rw [← Category.assoc, ← Category.assoc] at componentEquality
       exact (cancel_mono _).mp componentEquality
   let classSubobject (lineClass : scheme.Pic) : Subobject productModule :=

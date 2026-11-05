@@ -44,7 +44,7 @@ theorem abelianSum_lift (n : ℕ) {T : Over (Spec (.of k))}
     (x : Fin n → (T ⟶ C.carrier)) :
     Pi.lift x ≫ abelianSum C G φ n = ∏ i, x i ≫ φ := by
   rw [abelianSum_comp]
-  simp only [Pi.lift_π]
+  simp only [Pi.lift_comp_π]
 
 /-- The empty tuple maps to the identity section of the group scheme. -/
 theorem abelianSum_zero :

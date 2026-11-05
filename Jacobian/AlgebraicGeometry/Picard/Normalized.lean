@@ -81,7 +81,6 @@ lemma sectionBaseChange_comp_baseChangeMap (morphism : source ⟶ base) (section
   apply pullback.hom_ext
   · simp [baseChangeMap, Category.assoc]
   · simp [baseChangeMap, Category.assoc]
-    exact Category.id_comp restriction.left
 
 /-- Pullback from the parameter scheme followed by pullback along the section is the identity. -/
 def pullbackSectionBaseChangeSndIso (morphism : source ⟶ base) (sectionMorphism : base ⟶ source)

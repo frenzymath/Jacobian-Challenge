@@ -161,7 +161,7 @@ theorem curve_projection_ne (C : Curve k)
   have ht := congrArg (fun a => t ≫ a) h
   have hji : j ≠ i := Ne.symm hij
   apply curve_id_ne_constant C point
-  simpa only [t, Pi.lift_π, if_pos rfl, if_true, if_neg hji, c] using ht
+  simpa only [t, Pi.lift_comp_π, if_pos rfl, if_true, if_neg hji, c] using ht
 
 /-- The coordinate permutation action is faithful on a pointed curve. -/
 theorem curve_permute_injective (C : Curve k)
@@ -177,7 +177,7 @@ theorem curve_permute_injective (C : Curve k)
       Pi.π (fun _ : Fin n => C.carrier) i =
     Pi.lift (fun j : Fin n => Pi.π (fun _ : Fin n => C.carrier) (τ j)) ≫
       Pi.π (fun _ : Fin n => C.carrier) i at hπ
-  simpa only [Pi.lift_π] using hπ
+  simpa only [Pi.lift_comp_π] using hπ
 
 /-- Integrality and local noetherianness of the literal recursive ordered power. -/
 theorem curve_power_integral_noetherian (C : Curve k) (n : ℕ) :

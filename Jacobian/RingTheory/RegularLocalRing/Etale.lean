@@ -31,7 +31,7 @@ theorem IsRegularLocalRing.of_flat_of_map_maximalIdeal_eq {source target : Type*
     IsRegularLocalRing target := by
   apply IsRegularLocalRing.of_spanFinrank_maximalIdeal_le
   have : (maximalIdeal target).LiesOver (maximalIdeal source) :=
-    ⟨(((local_hom_TFAE (algebraMap source target)).out 0 4 rfl rfl).mp inferInstance).symm⟩
+    ⟨(maximalIdeal_comap (algebraMap source target)).symm⟩
   rw [← maximal_map, ← maximalIdeal_height_eq_ringKrullDim,
     Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown
       (maximalIdeal source) (maximalIdeal target)]

@@ -408,7 +408,7 @@ attribute [local instance] IsLocalization.opModule
 noncomputable def toDerivation' (D : LocalDerivation M ⊤)
     (h : ∀ (U : S.Opens) (V : X.Opens) (e : V ≤ f ⁻¹ᵁ U) (c : Γ(S, U)),
       D.app V le_top (f.appLE U V e c) = 0) :
-    M.val.Derivation' f.pullbackPresheafToPresheaf where
+    PresheafOfModulesOfCommRing.Derivation' M.val f.pullbackPresheafToPresheaf where
   d {V} := D.app V.unop le_top
   d_mul {V} a b := D.map_mul _ _ a b
   d_map {V V'} i x := by
@@ -450,14 +450,14 @@ lemma toDerivation'_d (D : LocalDerivation M ⊤)
 
 /-- A relative derivation of `𝒪_X`, as a local derivation over `⊤`. -/
 def ofDerivation' {S' : X.Opensᵒᵖ ⥤ CommRingCat.{u}} {φ : S' ⟶ X.presheaf}
-    (d : M.val.Derivation' φ) : LocalDerivation M ⊤ where
+    (d : PresheafOfModulesOfCommRing.Derivation' M.val φ) : LocalDerivation M ⊤ where
   app W _ := d.d (X := op W)
   map_mul _ _ a b := d.d_mul a b
   naturality _ _ _ h a := d.d_map (homOfLE h).op a
 
 @[simp]
 lemma ofDerivation'_app {S' : X.Opensᵒᵖ ⥤ CommRingCat.{u}} {φ : S' ⟶ X.presheaf}
-    (d : M.val.Derivation' φ) (W : X.Opens) (a : Γ(X, W)) :
+    (d : PresheafOfModulesOfCommRing.Derivation' M.val φ) (W : X.Opens) (a : Γ(X, W)) :
     (ofDerivation' d).app W le_top a = d.d (X := op W) a :=
   rfl
 

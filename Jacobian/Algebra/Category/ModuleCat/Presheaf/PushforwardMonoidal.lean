@@ -29,6 +29,7 @@ The type of `φ` is chosen so that it is the one obtained by whiskering a morphi
 
 set_option backward.isDefEq.respectTransparency false
 set_option backward.isDefEq.respectTransparency.types false
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
 
 universe v₁ v₂ u₁ u₂ u
 
@@ -72,7 +73,6 @@ lemma pushforward_μ_app_tmul (M₁ M₂ : PresheafOfModules.{u} (R ⋙ forget�
     (μ (pushforward.{u} (F := F) (R := R ⋙ forget₂ CommRingCat RingCat)
         (S := S ⋙ forget₂ CommRingCat RingCat) φ) M₁ M₂).app X (m₁ ⊗ₜ m₂) = m₁ ⊗ₜ m₂ := by
   rw [pushforward_μ_app]
-  erw [ModuleCat.restrictScalars_μ_tmul]
-  rfl
+  erw [ModuleCat.restrictScalars_μ_tmul (R := S.obj X) (S := R.obj (F.op.obj X))]
 
 end PresheafOfModules

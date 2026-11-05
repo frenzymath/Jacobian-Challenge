@@ -55,7 +55,7 @@ lemma cechComplexFunctor_d_π (k : ℕ) (y : Fin (k + 2) → ι) :
   congr 1
   dsimp [cechComplexFunctorπ, CosimplicialObject.δ,
     FormalCoproduct.cosimplicialObjectFunctor_obj_map, FormalCoproduct.evalOp_obj_map]
-  erw [Pi.lift_π]
+  erw [Pi.lift_comp_π]
   rfl
 
 /-- A morphism of presheaves acts factorwise on `cechComplexFunctor U`. -/

@@ -35,8 +35,7 @@ lemma bijective_rTensor_mkQ_of_smul_eq_zero {auxiliaryModule : Type*} [AddCommGr
     (Submodule.mkQ_surjective _)
   obtain ⟨otherValue, rfl⟩ := (hex value).1 hx
   clear hx hex
-  induction otherValue with
-  | zero => simp
+  induction otherValue using TensorProduct.inductionOn with
   | add otherValue thirdValue hy hz => simp [hy, hz]
   | tmul moduleElement degree =>
     obtain ⟨moduleElement, hm⟩ := moduleElement
@@ -99,8 +98,7 @@ lemma lTensor_smul_top_subtype_injective {submodule : Type*} [AddCommGroup submo
   have hrange : LinearMap.range multiplierValue = ideal • (⊤ : Submodule baseRing submodule) := by
     apply le_antisymm
     · rintro _ ⟨value, rfl⟩
-      induction value with
-      | zero => simp
+      induction value using TensorProduct.inductionOn with
       | add value otherValue hx hy => rw [map_add]; exact Submodule.add_mem _ hx hy
       | tmul index function => exact Submodule.smul_mem_smul index.2 trivial
     · rw [Submodule.smul_le]
@@ -276,8 +274,7 @@ lemma map_eq_zero_of_lTensor_subtype_eq_zero_of_flat
 
   let ν : ideal ⊗[baseRing] submodule →ₗ[baseRing] primeIdeal := (TensorProduct.lid baseRing submodule ∘ₗ ideal.subtype.rTensor submodule).codRestrict primeIdeal
     fun value ↦ by
-      induction value with
-      | zero => simp
+      induction value using TensorProduct.inductionOn with
       | add value otherValue hx hy => rw [map_add]; exact Submodule.add_mem _ hx hy
       | tmul index function => exact Submodule.smul_mem_smul index.2 trivial
   have hν : Function.Surjective ν := by
@@ -304,13 +301,11 @@ lemma map_eq_zero_of_lTensor_subtype_eq_zero_of_flat
       (Submodule.inclusion hK).lTensor moduleType (ν.lTensor moduleType (TensorProduct.assoc baseRing moduleType ideal submodule (parameter ⊗ₜ function))) =
         (((toSpanSingleton baseRing submodule function) ∘ₗ ideal.subtype).codRestrict residueRing
           fun index ↦ hK (Submodule.smul_mem_smul index.2 trivial)).lTensor moduleType parameter := by
-    induction parameter with
-    | zero => simp
+    induction parameter using TensorProduct.inductionOn with
     | add value otherValue hx hy => rw [add_tmul, map_add, map_add, map_add, hx, hy, map_add]
     | tmul moduleElement index => rfl
   clear hw
-  induction witness with
-  | zero => simp
+  induction witness using TensorProduct.inductionOn with
   | add value otherValue hx hy => simp only [map_add, hx, hy, add_zero]
   | tmul exponent function =>
     rw [LinearMap.rTensor_tmul, Submodule.subtype_apply, key]
@@ -413,8 +408,7 @@ lemma range_lTensor_smul_top_subtype_le {auxiliaryModule : Type*} [AddCommGroup 
     LinearMap.range ((baseIdeal • (⊤ : Submodule baseRing auxiliaryModule)).subtype.lTensor moduleType) ≤
       baseIdeal • (⊤ : Submodule baseRing (moduleType ⊗[baseRing] auxiliaryModule)) := by
   rintro _ ⟨value, rfl⟩
-  induction value with
-  | zero => simp
+  induction value using TensorProduct.inductionOn with
   | add value otherValue hx hy => rw [map_add]; exact Submodule.add_mem _ hx hy
   | tmul moduleElement degree =>
     obtain ⟨degree, hn⟩ := degree
@@ -668,14 +662,12 @@ theorem quotient_range [Flat baseRing moduleType] (φ : moduleType →ₗ[baseRi
   set π := (LinearMap.range φ).mkQ
   have hnat (otherValue : moduleType ⊗[baseRing] baseIdeal) : π (TensorProduct.rid baseRing moduleType (baseIdeal.subtype.lTensor moduleType otherValue)) =
       TensorProduct.rid baseRing quotientAlgebra (baseIdeal.subtype.lTensor quotientAlgebra (π.rTensor baseIdeal otherValue)) := by
-    induction otherValue with
-    | zero => simp
+    induction otherValue using TensorProduct.inductionOn with
     | add otherValue y' condition h' => simp only [map_add] at condition h' ⊢; rw [condition, h']
     | tmul moduleElement otherIndex => simp
   have hφnat (otherValue : moduleType ⊗[baseRing] baseIdeal) : φ (TensorProduct.rid baseRing moduleType (baseIdeal.subtype.lTensor moduleType otherValue)) =
       TensorProduct.rid baseRing moduleType (baseIdeal.subtype.lTensor moduleType (φ.rTensor baseIdeal otherValue)) := by
-    induction otherValue with
-    | zero => simp
+    induction otherValue using TensorProduct.inductionOn with
     | add otherValue y' condition h' => simp only [map_add] at condition h' ⊢; rw [condition, h']
     | tmul moduleElement otherIndex => simp
   rw [injective_iff_map_eq_zero]

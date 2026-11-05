@@ -105,7 +105,7 @@ theorem exists_decomposition_picardFunctor_representableBy (representing : Over 
     { app parameter := TypeCat.ofHom fun lineClass ↦ ULift.up (classifyingLift lineClass)
       naturality parameter changedParameter restriction := by
         ext lineClass
-        refine ULift.ext _ _ (hjmono degree _ _ ?_)
+        refine ULift.ext (hjmono degree _ _ ?_)
         change classifyingLift (degreePart.toFunctor.map restriction lineClass) ≫ inclusion degree = (restriction.unop ≫ classifyingLift lineClass) ≫ inclusion degree
         rw [classifyingLift_comp, Category.assoc, classifyingLift_comp, representation.comp_homEquiv_symm]
         exact congrArg representation.homEquiv.symm (NatTrans.naturality_apply (toPicardFunctor family) restriction lineClass.1) }
@@ -127,7 +127,7 @@ theorem exists_decomposition_picardFunctor_representableBy (representing : Over 
       rw [← picardDegree_toPicardFunctor, membership, picardDegree_map, degree_naturality, ← Set.mem_singleton_iff,
         ← Set.mem_preimage, ← inclusion_range degree]
       exact ⟨localMap.down.left (restriction.left localPoint), rfl⟩
-    refine ⟨⟨lineClass, degreeMembership⟩, ULift.ext _ _ (hjmono degree _ _ ?_)⟩
+    refine ⟨⟨lineClass, degreeMembership⟩, ULift.ext (hjmono degree _ _ ?_)⟩
     change classifyingLift ⟨lineClass, degreeMembership⟩ ≫ inclusion degree = (restriction ≫ localMap.down) ≫ inclusion degree
     rw [classifyingLift_comp, Category.assoc, ← Equiv.symm_apply_apply representation.homEquiv (localMap.down ≫ inclusion degree),
       representation.comp_homEquiv_symm]

@@ -151,7 +151,7 @@ theorem map_lift_val [IsSeparated f] [SmoothOfRelativeDimension 1 f]
     (x : Fin n → (T ⟶ Over.mk f)) :
     (e.homEquiv (Pi.lift x ≫ map f e)).val = ideal f x := by
   rw [map_val]
-  simp only [Pi.lift_π]
+  simp only [Pi.lift_comp_π]
 
 /-- The permutation action is the permutation of the coordinate projections. -/
 def permute (n : ℕ) (σ : Equiv.Perm (Fin n)) :
@@ -165,7 +165,7 @@ theorem permute_map [IsSeparated f] [SmoothOfRelativeDimension 1 f]
   apply e.homEquiv.injective
   apply Subtype.ext
   rw [map_val]
-  simpa only [permute, Pi.lift_π, Category.id_comp] using
+  simpa only [permute, Pi.lift_comp_π, Category.id_comp] using
     (ideal_permutation f (Pi.π (fun _ : Fin n => Over.mk f)) σ).trans
       (by simpa only [Category.id_comp] using (map_val f e (𝟙 _)).symm)
 

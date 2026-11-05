@@ -23,6 +23,7 @@ the statement is their naturality in the object of `C`.
 
 set_option backward.isDefEq.respectTransparency false
 set_option backward.isDefEq.respectTransparency.types false
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
 
 universe v₁ u₁ u
 

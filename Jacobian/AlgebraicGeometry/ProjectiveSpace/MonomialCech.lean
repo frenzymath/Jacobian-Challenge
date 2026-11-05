@@ -666,7 +666,7 @@ lemma monomialCechTopCoeff_monomialCechTopCocycle {d : ℕ} (hn : Fintype.card n
     monomialCechTopCoeff n A m E (monomialCechTopCocycle n A m hn E a) = a := by
   ext e
   rw [monomialCechTopCoeff_apply, monomialCechTopCocycle_coeff, tupleSign_self, one_mul,
-    Finsupp.mapDomain_apply Subtype.val_injective]
+    Finsupp.mapDomain_apply_of_injective Subtype.val_injective]
 
 variable (n A m) in
 /-- The coefficients of the top-degree cocycles on the bijective tuple `E`. -/

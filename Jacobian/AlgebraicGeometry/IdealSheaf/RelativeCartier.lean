@@ -292,7 +292,7 @@ theorem isInvertible_of_locallyQuasiFinite_of_field {baseField : Type universeLe
     exact absurd h0 (by norm_num)
 
   have : IsPrincipalIdealRing (curve.presheaf.stalk point) := by
-    refine ((tfae_of_isNoetherianRing_of_isLocalRing_of_isDomain _).out 5 0).mp ?_
+    refine ((tfae_of_isNoetherianRing_of_isLocalRing_of_isDomain _).out 6 1).mp ?_
     have condition := (IsRegularLocalRing.iff_finrank_cotangentSpace (curve.presheaf.stalk point)).mp
       inferInstance
     have local_dimension : ringKrullDim (curve.presheaf.stalk point) ≤ topologicalKrullDim curve := by

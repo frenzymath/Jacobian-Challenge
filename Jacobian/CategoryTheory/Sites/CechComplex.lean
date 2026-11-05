@@ -41,7 +41,7 @@ noncomputable def evalOpCompIso (P : Cᵒᵖ ⥤ A) :
   NatIso.ofComponents (fun X ↦ asIso (piComparison G _)) (fun {X Y} f ↦ by
     refine Pi.hom_ext _ _ fun i ↦ ?_
     simp only [Functor.comp_obj, Functor.comp_map, asIso_hom, Category.assoc,
-      piComparison_comp_π, ← G.map_comp, evalOp_obj_map, Pi.lift_π, Functor.comp_map]
+      piComparison_comp_π, ← G.map_comp, evalOp_obj_map, Pi.lift_comp_π, Functor.comp_map]
     rw [G.map_comp, ← Category.assoc, piComparison_comp_π])
 
 @[simp]
@@ -102,15 +102,15 @@ noncomputable def cechAugmentation (P : Cᵒᵖ ⥤ A) :
 @[reassoc (attr := simp)]
 lemma cechAugmentation_π (P : Cᵒᵖ ⥤ A) (i) :
     cechAugmentation U hT P ≫ Pi.π _ i = P.map (hT.from _).op :=
-  Pi.lift_π _ _
+  Pi.lift_comp_π _ _
 
 lemma cechAugmentation_δ (P : Cᵒᵖ ⥤ A) (i : Fin 2) :
     cechAugmentation U hT P ≫
       ((FormalCoproduct.cosimplicialObjectFunctor (FormalCoproduct.mk _ U).cech).obj P).δ i =
       Pi.lift fun _ ↦ P.map (hT.from _).op := by
   refine Pi.hom_ext _ _ fun j ↦ ?_
-  rw [Category.assoc, Pi.lift_π]
-  erw [Pi.lift_π]
+  rw [Category.assoc, Pi.lift_comp_π]
+  erw [Pi.lift_comp_π]
   rw [← Category.assoc, cechAugmentation_π, ← P.map_comp, ← op_comp]
   congr 2
   exact hT.hom_ext _ _
@@ -133,7 +133,7 @@ lemma cechAugmentation_naturality {P Q : Cᵒᵖ ⥤ A} (φ : P ⟶ Q) :
       φ.app _ ≫ cechAugmentation U hT Q := by
   refine Pi.hom_ext _ _ fun j ↦ ?_
   rw [Category.assoc, cechComplexFunctor_map_f]
-  erw [Pi.map_π, Pi.lift_π_assoc, Category.assoc, Pi.lift_π]
+  erw [Pi.map_π, Pi.lift_π_assoc, Category.assoc, Pi.lift_comp_π]
   exact φ.naturality _
 
 lemma map_cechAugmentation_comp (G : A ⥤ B) [G.Additive]
@@ -142,9 +142,9 @@ lemma map_cechAugmentation_comp (G : A ⥤ B) [G.Additive]
       cechAugmentation U hT (P ⋙ G) := by
   refine Pi.hom_ext _ _ fun j ↦ ?_
   rw [Category.assoc, cechComplexFunctorMapIso_hom_f]
-  erw [piComparison_comp_π, Pi.lift_π]
+  erw [piComparison_comp_π, Pi.lift_comp_π]
   rw [← G.map_comp]
-  erw [Pi.lift_π]
+  erw [Pi.lift_comp_π]
   rfl
 
 end CategoryTheory

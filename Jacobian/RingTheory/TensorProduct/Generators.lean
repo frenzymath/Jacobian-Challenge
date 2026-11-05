@@ -42,8 +42,7 @@ theorem closure_range_tmul_eq_top {firstIndex secondIndex : Type*} {firstFamily 
     exact Subring.subset_closure ⟨(firstUnitIndex, index), by simp [first_one]⟩
   have key : ∀ element : firstRing ⊗[baseRing] secondRing, element ∈ generatedRing := by
     intro element
-    induction element with
-    | zero => exact zero_mem _
+    induction element using TensorProduct.inductionOn with
     | tmul firstElement secondElement =>
         have factorization : firstElement ⊗ₜ[baseRing] secondElement = (firstElement ⊗ₜ[baseRing] (1 : secondRing)) * ((1 : firstRing) ⊗ₜ[baseRing] secondElement) := by
           rw [Algebra.TensorProduct.tmul_mul_tmul]; simp

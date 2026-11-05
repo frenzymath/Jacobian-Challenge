@@ -60,32 +60,26 @@ lemma baseChangeTensorEquiv_lTensor {tensorModule' : Type*} [AddCommGroup tensor
     [IsScalarTower R₀ R₁ tensorModule'] (function : tensorModule' →ₗ[R₁] tensorModule) (otherValue : ((R₁ ⊗[R₀] S₀) ⊗[S₀] M₀) ⊗[R₁] tensorModule') :
     baseChangeTensorEquiv M₀ tensorModule (function.lTensor _ otherValue) =
       (function.restrictScalars R₀).lTensor M₀ (baseChangeTensorEquiv M₀ tensorModule' otherValue) := by
-  induction otherValue with
-  | zero => simp
+  induction otherValue using TensorProduct.inductionOn with
   | add value otherValue hx hy => rw [map_add, map_add, hx, hy, map_add, map_add]
   | tmul value kernelElement =>
-    induction value with
-    | zero => simp
+    induction value using TensorProduct.inductionOn with
     | add value otherValue hx hy => simp only [add_tmul, map_add, hx, hy]
     | tmul otherCoefficient moduleElement =>
-      induction otherCoefficient with
-      | zero => simp
+      induction otherCoefficient using TensorProduct.inductionOn with
       | add value otherValue hx hy => simp only [add_tmul, map_add, hx, hy]
       | tmul scalar algebraElement => simp
 
 lemma baseChangeTensorEquiv_smul (scalar : R₁) (algebraElement : S₀) (otherValue : ((R₁ ⊗[R₀] S₀) ⊗[S₀] M₀) ⊗[R₁] tensorModule) :
     baseChangeTensorEquiv M₀ tensorModule ((scalar ⊗ₜ[R₀] algebraElement : R₁ ⊗[R₀] S₀) • otherValue) =
       algebraElement • (DistribSMul.toLinearMap R₀ tensorModule scalar).lTensor M₀ (baseChangeTensorEquiv M₀ tensorModule otherValue) := by
-  induction otherValue with
-  | zero => simp
+  induction otherValue using TensorProduct.inductionOn with
   | add value otherValue hx hy => rw [smul_add, map_add, hx, hy, map_add, map_add, smul_add]
   | tmul value kernelElement =>
-    induction value with
-    | zero => simp
+    induction value using TensorProduct.inductionOn with
     | add value otherValue hx hy => simp only [add_tmul, smul_add, map_add, hx, hy]
     | tmul otherCoefficient moduleElement =>
-      induction otherCoefficient with
-      | zero => simp
+      induction otherCoefficient using TensorProduct.inductionOn with
       | add value otherValue hx hy => simp only [add_tmul, smul_add, map_add, hx, hy]
       | tmul scalar' algebraElement' =>
         rw [smul_tmul', smul_tmul', smul_eq_mul, Algebra.TensorProduct.tmul_mul_tmul,
@@ -202,8 +196,7 @@ theorem flat_localizedModule_baseChange_of_forall [IsNoetherianRing R₀] [IsNoe
     let μ' : M₀ ⊗[R₀] p₀ →ₗ[S₀] M₀ := (AlgebraTensorModule.rid R₀ S₀ M₀).toLinearMap ∘ₗ
       AlgebraTensorModule.lTensor S₀ M₀ p₀.subtype
     have hnat1 (value : M₀ ⊗[R₀] p₀) : μ₀ (generators' value) = localizationMap (μ' value) := by
-      induction value with
-      | zero => simp
+      induction value using TensorProduct.inductionOn with
       | add value otherValue hx hy => rw [map_add, map_add, hx, hy, map_add, map_add]
       | tmul moduleElement coefficient =>
         simp only [μ₀, μ', generators', localizationMap, LinearMap.comp_apply, AlgebraTensorModule.rTensor_tmul,
@@ -212,8 +205,7 @@ theorem flat_localizedModule_baseChange_of_forall [IsNoetherianRing R₀] [IsNoe
         rw [← algebraMap_smul S₀ (coefficient : R₀) moduleElement, map_smul, algebraMap_smul]
     have hnat2 (value : M₀ ⊗[R₀] p₀) : AlgebraTensorModule.lTensor S₀ M₀' idealMap (generators' value) =
         gL (AlgebraTensorModule.lTensor S₀ M₀ idealMap value) := by
-      induction value with
-      | zero => simp
+      induction value using TensorProduct.inductionOn with
       | add value otherValue hx hy => rw [map_add, map_add, hx, hy, map_add, map_add]
       | tmul algebraElement coefficient => rfl
     obtain ⟨⟨kernelElement', algebraElement⟩, hs⟩ := IsLocalizedModule.surj q₀.primeCompl generators' kernelElement
@@ -293,8 +285,7 @@ theorem exists_finset_lTensor_eq_zero_of_injective [IsNoetherianRing R₀] (base
     have : ⇑(AlgebraTensorModule.rTensor R₀ M₀ testIdeal.subtype) = (TensorProduct.comm R₀ M₀ ambientRing) ∘
         ((testIdeal.subtype.restrictScalars R₀).lTensor M₀) ∘ (TensorProduct.comm R₀ testIdeal M₀) := by
       funext value
-      induction value with
-      | zero => simp
+      induction value using TensorProduct.inductionOn with
       | add value otherValue hx hy => simp only [map_add, hx, hy, Function.comp_apply]
       | tmul generator moduleElement => rfl
     rw [this]
@@ -304,8 +295,7 @@ theorem exists_finset_lTensor_eq_zero_of_injective [IsNoetherianRing R₀] (base
       (idealExtension.rTensor M₀ (TensorProduct.comm R₀ M₀ baseIdeal value)) =
         (1 : ambientRing) ⊗ₜ TensorProduct.rid R₀ M₀ (baseIdeal.subtype.lTensor M₀ value) := by
     intro value
-    induction value with
-    | zero => simp
+    induction value using TensorProduct.inductionOn with
     | add value otherValue hx hy => rw [map_add, map_add, map_add, hx, hy, map_add, map_add, tmul_add]
     | tmul algebraElement coefficient =>
       simp [idealExtension, Algebra.algebraMap_eq_smul_one, smul_tmul]
@@ -476,8 +466,7 @@ theorem flat_localizedModule_baseChange_map {stageRing stageRing' : Type u} [Com
   rw [map_zero]
   have key : ∀ localizer : stageRing ⊗[R₀] S₀, equivalence' (coefficientMap localizer • otherValue) = equivalence (localizer • thirdValue) := by
     intro localizer
-    induction localizer with
-    | zero => simp
+    induction localizer using TensorProduct.inductionOn with
     | add coefficient otherCoefficient ha hb => rw [map_add, add_smul, map_add, ha, hb, add_smul, map_add]
     | tmul scalar algebraElement =>
       rw [Algebra.TensorProduct.map_tmul, AlgHom.id_apply, baseChangeTensorEquiv_smul,
@@ -538,8 +527,7 @@ private lemma map_val_map_inclusion {ambientRing : Type u} [CommRing ambientRing
     Algebra.TensorProduct.map stageRing'.val (AlgHom.id R₀ S₀)
       (Algebra.TensorProduct.map (Subalgebra.inclusion condition) (AlgHom.id R₀ S₀) value) =
       Algebra.TensorProduct.map stageRing.val (AlgHom.id R₀ S₀) value := by
-  induction value with
-  | zero => simp
+  induction value using TensorProduct.inductionOn with
   | add coefficient otherCoefficient ha hb => simp only [map_add, ha, hb]
   | tmul coefficient algebraElement => rfl
 
@@ -548,8 +536,7 @@ private lemma map_inclusion_map_inclusion {ambientRing : Type u} [CommRing ambie
     Algebra.TensorProduct.map (Subalgebra.inclusion condition') (AlgHom.id R₀ S₀)
       (Algebra.TensorProduct.map (Subalgebra.inclusion condition) (AlgHom.id R₀ S₀) value) =
       Algebra.TensorProduct.map (Subalgebra.inclusion (condition.trans condition')) (AlgHom.id R₀ S₀) value := by
-  induction value with
-  | zero => simp
+  induction value using TensorProduct.inductionOn with
   | add coefficient otherCoefficient ha hb => simp only [map_add, ha, hb]
   | tmul coefficient algebraElement => rfl
 
@@ -557,8 +544,7 @@ private lemma map_eq_rTensor {ambientRing : Type u} [CommRing ambientRing] [Alge
     (condition : stageRing ≤ stageRing') (value : stageRing ⊗[R₀] S₀) :
     Algebra.TensorProduct.map (Subalgebra.inclusion condition) (AlgHom.id R₀ S₀) value =
       LinearMap.rTensor S₀ (Subalgebra.inclusion condition).toLinearMap value := by
-  induction value with
-  | zero => simp
+  induction value using TensorProduct.inductionOn with
   | add coefficient otherCoefficient ha hb => simp only [map_add, ha, hb]
   | tmul coefficient algebraElement => rfl
 
@@ -566,8 +552,7 @@ private lemma map_val_eq_rTensor {ambientRing : Type u} [CommRing ambientRing] [
     (value : stageRing ⊗[R₀] S₀) :
     Algebra.TensorProduct.map stageRing.val (AlgHom.id R₀ S₀) value =
       LinearMap.rTensor S₀ stageRing.val.toLinearMap value := by
-  induction value with
-  | zero => simp
+  induction value using TensorProduct.inductionOn with
   | add coefficient otherCoefficient ha hb => simp only [map_add, ha, hb]
   | tmul coefficient algebraElement => rfl
 

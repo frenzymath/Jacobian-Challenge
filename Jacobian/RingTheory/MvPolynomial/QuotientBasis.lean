@@ -29,10 +29,10 @@ def IsQuotientBasis {A : Type*} [CommRing A] [Algebra R A] (I : Ideal (MvPolynom
     Submodule.span A (Set.range fun l ↦ Ideal.Quotient.mk I (map (algebraMap R A) (w l))) = ⊤
 
 /-- Given coordinates `v (m, k)` for the monomials `m`, the `k`-th coordinate of a polynomial
-`g`, namely `∑ₘ coeff m g * v (m, k)`. -/
+`g`, namely `∑ₘ g.coeff m * v (m, k)`. -/
 noncomputable def quotientBasisCoord {A : Type*} [CommRing A] (v : (n →₀ ℕ) × Fin d → A)
     (g : MvPolynomial n A) (k : Fin d) : A :=
-  ∑ m ∈ g.support, coeff m g * v (m, k)
+  ∑ m ∈ g.support, g.coeff m * v (m, k)
 
 /-- The relations of the universal ring: the coordinates of `w l` are `e_l`, and the coordinates
 of `X i * m` are those of `∑ₗ v (m, l) • (X i * w l)`. -/
@@ -65,7 +65,7 @@ variable {A : Type*} [CommRing A] (v : (n →₀ ℕ) × Fin d → A)
 of `g`. -/
 theorem quotientBasisCoord_eq_sum_of_subset {g : MvPolynomial n A} {s : Finset (n →₀ ℕ)}
     (hs : g.support ⊆ s) (k : Fin d) :
-    quotientBasisCoord v g k = ∑ m ∈ s, coeff m g * v (m, k) :=
+    quotientBasisCoord v g k = ∑ m ∈ s, g.coeff m * v (m, k) :=
   Finset.sum_subset hs fun m _ hm ↦ by rw [notMem_support_iff.mp hm, zero_mul]
 
 /-- Coordinates are additive. -/

@@ -121,7 +121,7 @@ private theorem nonempty_extCohomologyIso (scheme : Scheme.{u}) (degree : ℕ) :
         congrArg ULift.down zeroImage
       rw [H.ker_δ_eq_range_map_g shortExact degree] at membership
       obtain ⟨preimage, image_eq⟩ := membership
-      exact ⟨ULift.up preimage, ULift.ext _ _ image_eq⟩
+      exact ⟨ULift.up preimage, ULift.ext image_eq⟩
     · rintro ⟨preimage, rfl⟩
       apply ULift.ext
       change H.δ shortExact degree (H.map sequence.g degree preimage.down) = 0
@@ -137,7 +137,7 @@ private theorem nonempty_extCohomologyIso (scheme : Scheme.{u}) (degree : ℕ) :
       Subsingleton.elim _ _
     rw [H.ker_map_f_eq_range_δ shortExact degree] at membership
     obtain ⟨preimage, image_eq⟩ := membership
-    exact ⟨ULift.up preimage, ULift.ext _ _ image_eq⟩
+    exact ⟨ULift.up preimage, ULift.ext image_eq⟩
 
 private def extCohomologyIso (scheme : Scheme.{u}) (degree : ℕ) :
     (⊤ : ObjectProperty scheme.Modules).ι ⋙ extFunctorObj (unit scheme) degree ≅

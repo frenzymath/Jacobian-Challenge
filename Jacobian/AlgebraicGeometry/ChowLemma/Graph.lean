@@ -64,7 +64,7 @@ noncomputable def tuple : ↑(⨅ index, cover index) ⟶ (ambient closedModels)
 
 @[reassoc (attr := simp)]
 lemma tuple_ambientπ (index : coverIndex) : tuple closedModels ≫ ambientπ closedModels index = toProjectiveSpace closedModels index := by
-  rw [tuple, ambientπ, ← Over.comp_left, Pi.lift_π]
+  rw [tuple, ambientπ, ← Over.comp_left, Pi.lift_comp_π]
   rfl
 
 @[reassoc (attr := simp)]

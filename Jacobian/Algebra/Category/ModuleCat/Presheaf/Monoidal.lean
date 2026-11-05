@@ -27,6 +27,7 @@ resp. over `V`, is free of rank one over `U ⨯ V`.
 
 set_option backward.isDefEq.respectTransparency false
 set_option backward.isDefEq.respectTransparency.types false
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
 
 universe u u₁
 
@@ -41,8 +42,7 @@ set_option backward.isDefEq.respectTransparency false in
 lemma tensorHom_app_tmul {M₁ M₂ M₃ M₄ : PresheafOfModules.{u} (R ⋙ forget₂ CommRingCat RingCat.{u})}
     (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) (X : Cᵒᵖ) (m₁ : M₁.obj X) (m₃ : M₃.obj X) :
     (f ⊗ₘ g).app X (m₁ ⊗ₜ m₃) = f.app X m₁ ⊗ₜ g.app X m₃ := by
-  rw [tensorHom_app]
-  erw [ModuleCat.MonoidalCategory.tensorHom_tmul]
+  exact ModuleCat.MonoidalCategory.tensorHom_tmul (f.app' X) (g.app' X) m₁ m₃
 
 /-- The bijection between the morphisms to a binary product and the pairs of morphisms. -/
 @[simps]
@@ -59,17 +59,17 @@ noncomputable def freeYonedaProdIso :
     (free (R ⋙ forget₂ CommRingCat RingCat.{u})).obj (yoneda.obj (U ⨯ V)) ≅
       (free (R ⋙ forget₂ CommRingCat RingCat.{u})).obj (yoneda.obj U) ⊗
         (free (R ⋙ forget₂ CommRingCat RingCat.{u})).obj (yoneda.obj V) :=
-  isoMk (fun X ↦ (ModuleCat.free ((R ⋙ forget₂ CommRingCat RingCat.{u}).obj X)).mapIso
+  PresheafOfModulesOfCommRing.isoMk (fun X ↦ (ModuleCat.free (R.obj X)).mapIso
       (homProdEquiv U V X.unop).toIso ≪≫
-    (ModuleCat.FreeMonoidal.μIso ((R ⋙ forget₂ CommRingCat RingCat.{u}).obj X) _ _).symm)
+    (ModuleCat.FreeMonoidal.μIso (R.obj X) _ _).symm)
     (fun X Y f ↦ by
       refine ModuleCat.free_hom_ext (fun h ↦ ?_)
       dsimp
       erw [ModuleCat.freeDesc_apply]
       dsimp
-      erw [ConcreteCategory.comp_apply, ModuleCat.free_map_apply, ModuleCat.free_map_apply]
+      erw [ModuleCat.free_map_apply, ModuleCat.free_map_apply]
       erw [ModuleCat.FreeMonoidal.μIso_inv_freeMk, ModuleCat.FreeMonoidal.μIso_inv_freeMk]
-      erw [Monoidal.tensorObj_map_tmul]
+      erw [PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul]
       dsimp
       erw [ModuleCat.freeDesc_apply, ModuleCat.freeDesc_apply]
       simp)
@@ -107,18 +107,18 @@ presheaf of modules of rank one. -/
 noncomputable def freeYonedaTerminalIso :
     (free (R ⋙ forget₂ CommRingCat RingCat.{u})).obj (yoneda.obj (⊤_ C)) ≅
       unit (R ⋙ forget₂ CommRingCat RingCat.{u}) :=
-  isoMk (fun X ↦ (ModuleCat.free ((R ⋙ forget₂ CommRingCat RingCat.{u}).obj X)).mapIso
+  PresheafOfModulesOfCommRing.isoMk (fun X ↦ (ModuleCat.free (R.obj X)).mapIso
       (Equiv.equivPUnit.{u + 1} (X.unop ⟶ ⊤_ C)).toIso ≪≫
-    (ModuleCat.FreeMonoidal.εIso ((R ⋙ forget₂ CommRingCat RingCat.{u}).obj X)).symm)
+    (ModuleCat.FreeMonoidal.εIso (R.obj X)).symm)
     (fun X Y f ↦ by
       refine ModuleCat.free_hom_ext (fun h ↦ ?_)
       dsimp
       erw [ModuleCat.freeDesc_apply]
       dsimp
-      erw [ConcreteCategory.comp_apply, ModuleCat.free_map_apply,
+      erw [ModuleCat.free_map_apply,
         ModuleCat.FreeMonoidal.εIso_inv_freeMk, ModuleCat.free_map_apply,
         ModuleCat.FreeMonoidal.εIso_inv_freeMk]
-      exact (unit_map_one _ f).symm)
+      exact (R.map f).hom.map_one.symm)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
@@ -165,7 +165,7 @@ lemma IsUniversalSection.tensorObj (hm : IsUniversalSection m) (hm' : IsUniversa
       naturality_apply, hn.freeYonedaIso_hom_app_freeYonedaGen]
     rfl
   rw [hx, hy, MonoidalCategory.tensorIso_hom]
-  erw [tensorHom_app, ModuleCat.MonoidalCategory.tensorHom_tmul, key hm, key hm']
+  erw [tensorHom_app_tmul, key hm, key hm']
 
 end
 

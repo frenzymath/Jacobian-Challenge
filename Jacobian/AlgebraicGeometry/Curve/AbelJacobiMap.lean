@@ -345,7 +345,6 @@ private def familyBaseChangeIso (curve : Curve baseField)
         coefficientMap ≫ constantSection curve rationalPoint point_over := by
     apply pullback.hom_ext
     · simp [constantSection, familyMap, productMap, Category.assoc]
-      exact Category.id_comp coefficientMap
     · simp only [constantSection, familyMap, productMap, Category.assoc,
         pullback.lift_snd, pullback.lift_snd_assoc]
       refine (congrArg (fun morphism ↦ extended.carrier.hom ≫ morphism)

@@ -68,7 +68,7 @@ theorem coheight_le_of_etale_mvPolynomial {baseField : Type u} [Field baseField]
   rw [← ringMap.coheight_apply_of_flat otherPoint, ← idealHeight_eq_coheight]
   refine ⟨?_, fun hy ↦ ?_⟩
   · have dimension_bound := Ideal.height_le_ringKrullDim_of_ne_top (ringMap otherPoint).2.ne_top
-    rw [MvPolynomial.ringKrullDim_of_isNoetherianRing, ringKrullDim_eq_zero_of_field] at dimension_bound
+    rw [MvPolynomial.ringKrullDim_of_isNoetherianRing_of_finite, ringKrullDim_eq_zero_of_field] at dimension_bound
     simp only [Nat.card_eq_fintype_card, Fintype.card_fin, zero_add] at dimension_bound
     exact_mod_cast dimension_bound
   · have : (ringMap otherPoint).asIdeal.IsMaximal := (PrimeSpectrum.isClosed_singleton_iff_isMaximal _).mp

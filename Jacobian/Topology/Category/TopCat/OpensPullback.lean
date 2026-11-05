@@ -23,7 +23,7 @@ variable {X Y : TopCat.{u}}
 
 instance (f : X ⟶ Y) : (Opens.map f).Final where
   out U := isConnected_of_isTerminal _ (IsTerminal.ofUniqueHom
-    (Y := StructuredArrow.mk (S := U) (Y := (⊤ : Opens Y))
+    (X := StructuredArrow.mk (S := U) (Y := (⊤ : Opens Y))
       (homOfLE (by simp) : U ⟶ (Opens.map f).obj ⊤))
     (fun _ ↦ StructuredArrow.homMk (homOfLE le_top) (Subsingleton.elim _ _))
     (fun _ _ ↦ StructuredArrow.hom_ext _ _ (Subsingleton.elim _ _)))

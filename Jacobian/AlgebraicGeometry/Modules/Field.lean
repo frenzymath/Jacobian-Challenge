@@ -89,7 +89,7 @@ private lemma fieldSections_smul_top_eq (M : (Spec R).Modules) (r : R) (x : Γ(M
 theorem finrank_eq_of_coe_eq (M : (Spec R).Modules) (p : Submodule R Γ(M, ⊤))
     (p' : Submodule Γ(Spec R, ⊤) Γ(M, ⊤)) (h : (p : Set Γ(M, ⊤)) = p') :
     Module.finrank R p = Module.finrank Γ(Spec R, ⊤) p' := by
-  let j : p ≃+ p' := { Equiv.setCongr h with map_add' _ _ := rfl }
+  let j : p ≃+ p' := { Set.equivOfEq h with map_add' _ _ := rfl }
   have hi : Function.Bijective (Scheme.ΓSpecIso R).inv :=
     ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso R).inv
   exact congrArg Cardinal.toNat

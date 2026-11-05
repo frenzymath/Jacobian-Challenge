@@ -110,7 +110,7 @@ noncomputable def homologyRightDerivedFunctorPlusObjQIsoOfInjective (L : Cochain
         (F.rightDerivedFunctorPlus.obj (DerivedCategory.Plus.Q.obj L)) ≅
       ((F.mapHomologicalComplex _).obj L.obj).homology n :=
   (DerivedCategory.Plus.homologyFunctor D n).mapIso
-      (asIso (F.rightDerivedFunctorPlusUnit.app ((HomotopyCategory.Plus.quotient C).obj L))).symm ≪≫
+      (asIso (F.rightDerivedFunctorPlusUnith.app ((HomotopyCategory.Plus.quotient C).obj L))).symm ≪≫
     (DerivedCategory.homologyFunctorFactorsh D n).app _ ≪≫
     (HomotopyCategory.homologyFunctorFactors D _ n).app _
 
@@ -131,7 +131,7 @@ noncomputable def rightDerivedFunctorPlusObjSingleFunctorIsoQ (X : C) :
   F.rightDerivedFunctorPlus.mapIso (DerivedCategory.Plus.ι.preimageIso
     ((DerivedCategory.singleFunctorIsoCompQ C 0).app X ≪≫
       asIso (DerivedCategory.Q.map R.ι') ≪≫ (DerivedCategory.quotientCompQhIso C).symm.app _)) ≪≫
-    (asIso (F.rightDerivedFunctorPlusUnit.app ((HomotopyCategory.Plus.quotient C).obj L))).symm
+    (asIso (F.rightDerivedFunctorPlusUnith.app ((HomotopyCategory.Plus.quotient C).obj L))).symm
 
 /-- The `n`-th homology of `R⁺F` applied to `X` placed in degree `0` is `R^n F X`. -/
 noncomputable def homologyRightDerivedFunctorPlusObjSingleFunctorIso (X : C) (n : ℕ) :
@@ -162,7 +162,7 @@ lemma rightDerivedFunctorPlusObjSingleFunctorIsoQ_hom_naturality {X Y : C} {f : 
   let LX : CochainComplex.Plus C := ⟨(injectiveResolution X).cochainComplex, 0, inferInstance⟩
   let LY : CochainComplex.Plus C := ⟨(injectiveResolution Y).cochainComplex, 0, inferInstance⟩
   let g : LX ⟶ LY := ObjectProperty.homMk φ.hom'
-  have h₁ := F.rightDerivedFunctorPlusUnit.naturality
+  have h₁ := F.rightDerivedFunctorPlusUnith.naturality
     ((HomotopyCategory.Plus.quotient C).map g)
   have h₂ : (DerivedCategory.Plus.singleFunctor C 0).map f ≫
       (DerivedCategory.Plus.ι.preimageIso (X := (DerivedCategory.Plus.singleFunctor C 0).obj Y)

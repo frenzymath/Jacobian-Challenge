@@ -12,6 +12,7 @@ noncomputable section
 
 set_option backward.isDefEq.respectTransparency false
 set_option backward.isDefEq.respectTransparency.types false
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
 
 universe u
 
@@ -79,7 +80,7 @@ lemma dualTensorHom_app_bijective {U : C} (p₀ : P.obj (op U))
     (hgen : ∀ (V : (Over U)ᵒᵖ) (x : P.obj (op V.unop.left)),
       ∃ r : R.obj (op V.unop.left), x = r • P.map V.unop.hom.op p₀) :
     Function.Bijective ((dualTensorHom M P).app (op U)) := by
-  have hp₀ : ∀ p : P.obj (op U), ∃ r : (R ⋙ forget₂ CommRingCat RingCat).obj (op U),
+  have hp₀ : ∀ p : P.obj (op U), ∃ r : R.obj (op U),
       p = r • p₀ := fun p ↦ by
     obtain ⟨r, hr⟩ := hgen (op (Over.mk (𝟙 U))) p
     refine ⟨r, hr.trans (congrArg (fun q : P.obj (op U) ↦ r • q) ?_)⟩
@@ -92,7 +93,7 @@ lemma dualTensorHom_app_bijective {U : C} (p₀ : P.obj (op U))
     | zero => exact ⟨0, by simp⟩
     | tmul φ p =>
       obtain ⟨a, rfl⟩ := hp₀ p
-      exact ⟨a • φ, (TensorProduct.smul_tmul _ _ _).symm⟩
+      exact ⟨a • φ, (TensorProduct.smul_tmul (R := R.obj (op U)) _ _ _).symm⟩
     | add t t' ht ht' =>
       obtain ⟨φ, rfl⟩ := ht
       obtain ⟨φ', rfl⟩ := ht'
@@ -150,7 +151,7 @@ lemma dualTensorHom_app_bijective_of_free {U : C} {ι : Type*} [Fintype ι] [Dec
       (Over.homMk W.unop.hom (Category.comp_id _) : W.unop ⟶ Over.mk (𝟙 U)).op (m i)
   let c' : ι → (homObj M (unit _)).obj (op U) := c
   let a (φ : (homObj M (unit _)).obj (op U)) (i : ι) :
-      (R ⋙ forget₂ CommRingCat RingCat).obj (op U) :=
+      R.obj (op U) :=
     (show R.obj (op U) from φ.app T (m i))
   have hdual (φ : (homObj M (unit _)).obj (op U)) : φ = ∑ i, a φ i • c' i := by
     refine hom_ext (M₁ := (restrictOver R U).obj M) (M₂ := (restrictOver R U).obj (unit _))
@@ -172,7 +173,7 @@ lemma dualTensorHom_app_bijective_of_free {U : C} {ι : Type*} [Fintype ι] [Dec
       refine ⟨fun i ↦ a φ i • q, ?_⟩
       conv_lhs => rw [hdual φ]
       rw [TensorProduct.sum_tmul]
-      exact Finset.sum_congr rfl fun i _ ↦ TensorProduct.smul_tmul _ _ _
+      exact Finset.sum_congr rfl fun i _ ↦ TensorProduct.smul_tmul (R := R.obj (op U)) _ _ _
     | add t t' ht ht' =>
       obtain ⟨p, rfl⟩ := ht
       obtain ⟨p', rfl⟩ := ht'

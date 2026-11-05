@@ -11,6 +11,7 @@ noncomputable section
 
 set_option backward.isDefEq.respectTransparency false
 set_option backward.isDefEq.respectTransparency.types false
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
 
 universe v v₁ u₁ u
 
@@ -31,8 +32,15 @@ lemma homObjMap_add_left (f f' : M' ⟶ M) (g : N ⟶ N') :
     ((restrictOver R X.unop).map f') _
 
 lemma homObjMap_zero_left (g : N ⟶ N') : homObjMap (0 : M' ⟶ M) g = 0 := by
-  ext X φ : 3
-  exact Limits.zero_comp (X := (restrictOver R X.unop).obj M')
+  ext X : 1
+  refine ModuleCat.hom_ext (LinearMap.ext fun
+    (φ : (restrictOver R X.unop).obj M ⟶ (restrictOver R X.unop).obj N) ↦ ?_)
+  change (restrictOver R X.unop).map (0 : M' ⟶ M) ≫ φ ≫
+    (restrictOver R X.unop).map g = 0
+  have h0 : (restrictOver R X.unop).map (0 : M' ⟶ M) = 0 := by
+    ext W x
+    rfl
+  rw [h0, Limits.zero_comp]
 
 lemma restrictOver_smul_app_apply {M P : PresheafOfModules.{v} (R ⋙ forget₂ _ _)}
     {U : C} (r : R.obj (op U)) (φ : (restrictOver R U).obj M ⟶ (restrictOver R U).obj P)

@@ -100,8 +100,7 @@ omit [Module.Flat baseRing coverRing] in
 private lemma descendedMap_comp_map_val (tensor : coverRing ⊗[baseRing] datum.descended) :
     TensorProduct.mulMap baseRing coverRing totalRing (Algebra.TensorProduct.map (AlgHom.id coverRing coverRing) datum.descended.val tensor) =
       datum.descendedMap tensor := by
-  induction tensor with
-  | zero => simp
+  induction tensor using TensorProduct.inductionOn with
   | tmul scalar invariant => simp
   | add tensor otherTensor first_eq second_eq => simp [first_eq, second_eq]
 
@@ -121,8 +120,7 @@ private lemma map_val_injective :
 private lemma liftCoaction_descendedMap (tensor : coverRing ⊗[baseRing] datum.descended) : datum.liftCoaction (datum.descendedMap tensor) = tensor := by
   apply datum.map_val_injective
   rw [coe_liftCoaction]
-  induction tensor with
-  | zero => simp
+  induction tensor using TensorProduct.inductionOn with
   | tmul scalar invariant =>
     rw [descendedMap_tmul, datum.coaction_smul, datum.coaction_of_mem_descended invariant.2]
     simp [TensorProduct.smul_tmul']

@@ -217,8 +217,7 @@ private theorem adjoin_tensor_generators
   apply top_unique
   intro z _
   change z ∈ D
-  induction z with
-  | zero => exact D.zero_mem
+  induction z using TensorProduct.inductionOn with
   | tmul t c =>
     have ht : TensorProduct.tmul R t (1 : C) ∈ D := by
       have heq :

@@ -252,8 +252,9 @@ theorem linearIndependent_awayMonomial : LinearIndependent R (awayMonomial R s) 
         (e₀.1 + (N + k) • s.indicator (1 : n → ℤ)) i := by
       omega
     simpa using h3)
-  have := congrArg (coeff (u e₀)) hk'
-  rw [coeff_sum, coeff_zero, Finset.sum_eq_single e₀ (fun e he hne ↦ by
+  have := congrArg (fun p ↦ p.coeff (u e₀)) hk'
+  rw [coeff_sum, AddMonoidAlgebra.coeff_zero, Finsupp.zero_apply,
+    Finset.sum_eq_single e₀ (fun e he hne ↦ by
     rw [coeff_monomial, if_neg fun h ↦ hne (hu e he h)]) (fun h ↦ (h he₀).elim),
     coeff_monomial, if_pos rfl] at this
   exact this
@@ -296,7 +297,7 @@ theorem span_awayMonomial : Submodule.span R (Set.range (awayMonomial R s)) = �
     congr 1
     exact hmono.symm
   have hz : Away.mk _ (monomialToNat_indicator_mem R s) N a ha =
-      ∑ u ∈ a.support.attach, coeff u.1 a • awayMonomial R s (e u) := by
+      ∑ u ∈ a.support.attach, a.coeff u.1 • awayMonomial R s (e u) := by
     apply HomogeneousLocalization.val_injective
     rw [val_sum, Away.val_mk]
     conv_lhs => rw [a.as_sum]

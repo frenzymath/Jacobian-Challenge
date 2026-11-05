@@ -56,8 +56,7 @@ theorem tensorProduct :
   let : Algebra (A₁ ⊗[R₀] B₀) (A ⊗[A₁] (A₁ ⊗[R₀] B₀)) := Algebra.TensorProduct.rightAlgebra
   refine Algebra.IsPushout.of_equiv ((Algebra.TensorProduct.cancelBaseChange R₀ A₁ A A B₀).trans
     (Algebra.IsPushout.equiv R₀ A B₀ B)) (RingHom.ext fun x ↦ ?_)
-  induction x with
-  | zero => simp
+  induction x using TensorProduct.inductionOn with
   | tmul a b =>
     simp [RingHom.algebraMap_toAlgebra, Algebra.IsPushout.equiv_tmul,
       Algebra.algebraMap_eq_smul_one]

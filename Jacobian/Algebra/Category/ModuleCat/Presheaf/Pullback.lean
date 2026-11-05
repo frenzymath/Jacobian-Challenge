@@ -173,7 +173,7 @@ lemma isIso_δ_freeYoneda :
     freeYonedaEquiv_apply, freeYonedaProdIso_hom_app_freeYonedaGen,
     adjunctionOfCommRingCat_homEquiv_δ, ConcreteCategory.congr_hom (comp_app _ _ _) _]
   simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply]
-  erw [tensorHom_app_tmul, pushforward_μ_app_tmul, Monoidal.tensorObj_map_tmul,
+  erw [tensorHom_app_tmul, pushforward_μ_app_tmul, PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul,
     ← map_comp_apply, ← map_comp_apply, ← op_comp, ← op_comp, prodComparison_fst,
     prodComparison_snd, ← freeYoneda_map_freeYonedaGen (R := S ⋙ forget₂ CommRingCat RingCat)
       (X := U) (prod.fst : U ⨯ V ⟶ U),
@@ -249,7 +249,8 @@ instance isIso_η_pullbackOfCommRingCat [HasTerminal C] [HasTerminal D]
   erw [key]
   rw [Adjunction.homEquiv_naturality_left, freeYonedaEquiv_comp,
     freeYonedaEquiv_apply, freeYonedaTerminalIso_hom_app_freeYonedaGen]
-  erw [adjunctionOfCommRingCat_homEquiv_η, pushforward_ε_app, ModuleCat.restrictScalars_η]
+  erw [adjunctionOfCommRingCat_homEquiv_η, pushforward_ε_app, ModuleCat.restrictScalars_η
+    (R := S.obj (op (⊤_ C))) (S := R.obj (op (F.obj (⊤_ C))))]
   exact map_one (φ.app (op (⊤_ C))).hom
 
 /-- The pullback functor between categories of presheaves of modules is monoidal, as soon as

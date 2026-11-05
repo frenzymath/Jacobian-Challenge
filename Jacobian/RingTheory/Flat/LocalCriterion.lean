@@ -139,8 +139,7 @@ lemma lTensor_injective_iff_of_isLocalizedModule (multiplicativeSet : Submonoid 
   let fM := AlgebraTensorModule.lTensor algebraRing moduleType function
   let fL := AlgebraTensorModule.lTensor algebraRing localizedModule function
   have hsq (otherValue : moduleType ⊗[baseRing] N') : fL (g' otherValue) = localizer (fM otherValue) := by
-    induction otherValue with
-    | zero => simp
+    induction otherValue using TensorProduct.inductionOn with
     | add otherValue thirdValue hy hz => rw [map_add, map_add, map_add, map_add, hy, hz]
     | tmul moduleElement degree => rfl
   constructor
@@ -263,8 +262,7 @@ theorem exists_notMem_pow_smul_eq_zero [IsNoetherianRing baseRing] (basePrime : 
   let e' := equivOfCompatibleSMul baseRing (baseRing ⧸ basePrime) baseRing moduleType N'
   let equivalence := equivOfCompatibleSMul baseRing (baseRing ⧸ basePrime) baseRing moduleType auxiliaryModule
   have hcomm (thirdValue : moduleType ⊗[baseRing ⧸ basePrime] N') : equivalence (f'.lTensor moduleType thirdValue) = function.lTensor moduleType (e' thirdValue) := by
-    induction thirdValue with
-    | zero => simp
+    induction thirdValue using TensorProduct.inductionOn with
     | add thirdValue witness hz hw => rw [map_add, map_add, map_add, map_add, hz, hw]
     | tmul moduleElement degree => rfl
   obtain ⟨_, ⟨exponent, rfl⟩, ht⟩ := hinj (e'.symm otherValue) (by
@@ -272,8 +270,7 @@ theorem exists_notMem_pow_smul_eq_zero [IsNoetherianRing baseRing] (basePrime : 
     rw [hcomm, LinearEquiv.apply_symm_apply, hy, map_zero])
   refine ⟨exponent, ?_⟩
   have hsmul (thirdValue : moduleType ⊗[baseRing ⧸ basePrime] N') : factor ^ exponent • thirdValue = (Ideal.Quotient.mk basePrime factor) ^ exponent • thirdValue := by
-    induction thirdValue with
-    | zero => simp
+    induction thirdValue using TensorProduct.inductionOn with
     | add thirdValue witness hz hw => rw [smul_add, smul_add, hz, hw]
     | tmul moduleElement degree =>
       rw [TensorProduct.smul_tmul', TensorProduct.smul_tmul', ← map_pow]
@@ -503,8 +500,7 @@ theorem _root_.Algebra.exists_notMem_flat_localizedModule_quotient [IsNoetherian
             induction hy using Submodule.smul_induction_on' with
             | smul coefficient hr otherValue _ => rw [smul_comm]; exact Submodule.smul_mem_smul hr trivial
             | add otherValue _ thirdValue _ hy hz => rw [smul_add]; exact Submodule.add_mem _ hy hz) (equivalence value) := by
-      induction value with
-      | zero => simp
+      induction value using TensorProduct.inductionOn with
       | add value otherValue hx hy => rw [map_add, map_add, map_add, hx, hy, map_add]
       | tmul otherValue coefficient =>
         obtain ⟨coefficient, rfl⟩ := Ideal.Quotient.mk_surjective coefficient
@@ -680,8 +676,7 @@ theorem _root_.Algebra.exists_notMem_forall_pow_smul_eq_zero [IsNoetherianRing b
   have : IsLocalizedModule (Submonoid.powers localizer) ℓ :=
     IsLocalizedModule.rTensor (A := algebraRing) _ (Algebra.linearMap algebraRing ambientScheme)
   have hnat (thirdValue : algebraRing ⊗[baseRing] auxiliaryModule) : φ.rTensor auxiliaryModule (ℓ thirdValue) = ℓ (function • thirdValue) := by
-    induction thirdValue with
-    | zero => simp
+    induction thirdValue using TensorProduct.inductionOn with
     | add thirdValue witness hz hw => rw [map_add, map_add, hz, hw, smul_add, map_add]
     | tmul factor degree => simp [φ, ℓ, scalar, smul_tmul']
   have h0 : ℓ otherValue = 0 := hinj (by rw [hnat, hy, map_zero, map_zero])

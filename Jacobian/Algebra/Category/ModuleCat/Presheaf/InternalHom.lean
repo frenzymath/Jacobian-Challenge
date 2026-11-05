@@ -49,6 +49,8 @@ open CategoryTheory Opposite
 
 namespace PresheafOfModules
 
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
+
 section SectionsSMul
 
 variable {D : Type u₂} [Category.{v₂} D] {S : Dᵒᵖ ⥤ CommRingCat.{u}}
@@ -330,6 +332,9 @@ noncomputable def homFunctor :
 
 section TensorHom
 
+set_option backward.isDefEq.respectTransparency false
+set_option backward.isDefEq.respectTransparency.types false
+
 open MonoidalCategory
 
 variable {C : Type u} [Category.{u} C] {R : Cᵒᵖ ⥤ CommRingCat.{u}}
@@ -340,7 +345,7 @@ variable (M) in
 /-- The morphism `M(X) ⟶ (M ⊗ P)(X)` sending `m` to `m ⊗ p`, for a section `p` of `P` over
 `X`. -/
 noncomputable def tmulRight {X : Cᵒᵖ} (p : P.obj X) : M.obj X ⟶ (M ⊗ P).obj X :=
-  ModuleCat.ofHom ((TensorProduct.mk (R.obj X) (M.obj X) (P.obj X)).flip p)
+  ModuleCat.ofHom (R := R.obj X) ((TensorProduct.mk (R.obj X) (M.obj X) (P.obj X)).flip p)
 
 @[simp]
 lemma tmulRight_apply {X : Cᵒᵖ} (p : P.obj X) (m : M.obj X) :
@@ -359,8 +364,10 @@ noncomputable def tensorHomCurryApp (φ : M ⊗ P ⟶ N) {U : C} (p : P.obj (op 
       (naturality_apply φ f.unop.left.op (m ⊗ₜ[R.obj (op W.unop.left)] P.map W.unop.hom.op p))
     refine (congrArg (fun q : P.obj (op W'.unop.left) ↦
       M.map f.unop.left.op m ⊗ₜ[R.obj (op W'.unop.left)] q) ?_).trans
-        (Monoidal.tensorObj_map_tmul f.unop.left.op m _).symm
-    rw [← map_comp_apply, ← op_comp, Over.w]
+        (PresheafOfModulesOfCommRing.Monoidal.tensorObj_map_tmul f.unop.left.op m _).symm
+    exact (P.congr_map_apply (show W'.unop.hom.op =
+        W.unop.hom.op ≫ f.unop.left.op by rw [← op_comp, Over.w]) p).trans
+      (P.map_comp_apply W.unop.hom.op f.unop.left.op p)
 
 @[simp]
 lemma tensorHomCurryApp_app_apply (φ : M ⊗ P ⟶ N) {U : C} (p : P.obj (op U))
@@ -498,7 +505,10 @@ lemma tensorHomUncurry_id_app_bijective {W : C} (m₀ : M.obj (op W))
   · obtain ⟨r, hr⟩ := hgen (Over.mk (𝟙 W)) p
     refine ⟨r, hr.trans (congrArg (r • ·) ?_)⟩
     rw [PresheafOfModules.restrictₛₗ_apply]
-    simp
+    change M.map (𝟙 (op W)) m₀ = m₀
+    rw [M.map_id]
+    simp only [ModuleCat.restrictScalarsId'_inv_app,
+      ModuleCat.restrictScalarsId'App_inv_apply]
   · rw [injective_iff_map_eq_zero]
     intro (q : (restrictOver R W).obj M ⟶ (restrictOver R W).obj (unit _))
       (hq : q.app (op (Over.mk (𝟙 W))) m₀ = 0)

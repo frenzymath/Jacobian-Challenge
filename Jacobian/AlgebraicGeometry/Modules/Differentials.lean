@@ -64,11 +64,12 @@ For an `A`-algebra `B`, apply these to `φ = CommRingCat.ofHom (algebraMap A B)`
 noncomputable section
 set_option backward.isDefEq.respectTransparency false
 set_option backward.isDefEq.respectTransparency.types false
+set_option backward.isDefEq.respectTransparency.instanceSearchTypes false
 
 universe u
 
-open CategoryTheory Limits Opposite TopologicalSpace PresheafOfModules
-  PresheafOfModules.DifferentialsConstruction
+open CategoryTheory Limits Opposite TopologicalSpace PresheafOfModules PresheafOfModulesOfCommRing
+  PresheafOfModulesOfCommRing.DifferentialsConstruction
 
 namespace AlgebraicGeometry.Scheme.Hom
 
@@ -89,7 +90,7 @@ noncomputable def relativeDifferentials : X.Modules :=
 /-- The universal derivation `d : 𝒪_X → Ω¹_{X/S}`, relative to `f⁻¹𝒪_S ⟶ 𝒪_X`: the universal
 derivation into the presheaf of differentials, composed with the sheafification unit. -/
 noncomputable def relativeDifferentialsDerivation :
-    f.relativeDifferentials.val.Derivation' f.pullbackPresheafToPresheaf :=
+    PresheafOfModulesOfCommRing.Derivation' f.relativeDifferentials.val f.pullbackPresheafToPresheaf :=
   (derivation' f.pullbackPresheafToPresheaf).postcomp
     ((sheafificationAdjunction (𝟙 X.ringCatSheaf.obj)).unit.app _)
 
@@ -97,7 +98,7 @@ noncomputable def relativeDifferentialsDerivation :
 composing with `d` identifies morphisms `Ω¹_{X/S} ⟶ M` with `f⁻¹𝒪_S`-linear derivations
 `𝒪_X → M`. -/
 noncomputable def relativeDifferentialsHomEquiv (M : X.Modules) :
-    (f.relativeDifferentials ⟶ M) ≃ M.val.Derivation' f.pullbackPresheafToPresheaf where
+    (f.relativeDifferentials ⟶ M) ≃ PresheafOfModulesOfCommRing.Derivation' M.val f.pullbackPresheafToPresheaf where
   toFun g := f.relativeDifferentialsDerivation.postcomp g.val
   invFun D := ((sheafificationAdjunction (𝟙 X.ringCatSheaf.obj)).homEquiv _ _).symm
     ((isUniversal' f.pullbackPresheafToPresheaf).desc D)
@@ -170,9 +171,9 @@ lemma app_eq_pullbackPresheafToPresheaf_app (V : S.Opens) (a : Γ(S, V)) :
 
 variable {f} in
 /-- A derivation relative to `f⁻¹𝒪_S ⟶ 𝒪_X` vanishes on the image of `f.app`. -/
-lemma _root_.PresheafOfModules.Derivation'.d_app_app
+lemma _root_.PresheafOfModulesOfCommRing.Derivation'.d_app_app
     {M : _root_.PresheafOfModules.{u} (X.presheaf ⋙ forget₂ _ _)}
-    (D : M.Derivation' f.pullbackPresheafToPresheaf) (V : S.Opens) (a : Γ(S, V)) :
+    (D : PresheafOfModulesOfCommRing.Derivation' M f.pullbackPresheafToPresheaf) (V : S.Opens) (a : Γ(S, V)) :
     D.d (X := op (f ⁻¹ᵁ V)) (f.app V a) = 0 := by
   obtain ⟨x, hx⟩ := f.app_eq_pullbackPresheafToPresheaf_app V a
   rw [← hx]
@@ -186,7 +187,7 @@ noncomputable def derivationMk {M : _root_.PresheafOfModules.{u} (X.presheaf ⋙
     (d_map : ∀ {U V : X.Opensᵒᵖ} (i : U ⟶ V) (x : X.presheaf.obj U),
       d (X.presheaf.map i x) = M.map i (d x))
     (d_app : ∀ (V : S.Opens) (a : Γ(S, V)), d (U := op (f ⁻¹ᵁ V)) (f.app V a) = 0) :
-    M.Derivation' f.pullbackPresheafToPresheaf where
+    PresheafOfModulesOfCommRing.Derivation' M f.pullbackPresheafToPresheaf where
   d := d
   d_mul := d_mul
   d_map := d_map
@@ -201,7 +202,7 @@ noncomputable def derivationMk {M : _root_.PresheafOfModules.{u} (X.presheaf ⋙
 
 /-- On sections, `(relativeDifferentialsHomEquiv M).symm D` sends `d x` to `D x`. -/
 lemma relativeDifferentialsHomEquiv_symm_app_d {M : X.Modules}
-    (D : M.val.Derivation' f.pullbackPresheafToPresheaf) {U : X.Opensᵒᵖ} (x : X.presheaf.obj U) :
+    (D : PresheafOfModulesOfCommRing.Derivation' M.val f.pullbackPresheafToPresheaf) {U : X.Opensᵒᵖ} (x : X.presheaf.obj U) :
     ((f.relativeDifferentialsHomEquiv M).symm D).val.app U
       (f.relativeDifferentialsDerivation.d x) = D.d x :=
   congr($((f.relativeDifferentialsHomEquiv M).apply_symm_apply D).d x)
@@ -215,9 +216,9 @@ noncomputable def relativeDifferentialsCongr {g : X ⟶ S} (h : f = g) :
 sheaves of relative differentials. -/
 noncomputable def relativeDifferentialsIsoOfDerivation {S₁ S₂ : Scheme.{u}} (f₁ : X ⟶ S₁)
     (f₂ : X ⟶ S₂)
-    (h₁ : ∀ (M : X.Modules) (D : M.val.Derivation' f₁.pullbackPresheafToPresheaf) (V : S₂.Opens)
+    (h₁ : ∀ (M : X.Modules) (D : PresheafOfModulesOfCommRing.Derivation' M.val f₁.pullbackPresheafToPresheaf) (V : S₂.Opens)
       (a : Γ(S₂, V)), D.d (X := op (f₂ ⁻¹ᵁ V)) (f₂.app V a) = 0)
-    (h₂ : ∀ (M : X.Modules) (D : M.val.Derivation' f₂.pullbackPresheafToPresheaf) (V : S₁.Opens)
+    (h₂ : ∀ (M : X.Modules) (D : PresheafOfModulesOfCommRing.Derivation' M.val f₂.pullbackPresheafToPresheaf) (V : S₁.Opens)
       (a : Γ(S₁, V)), D.d (X := op (f₁ ⁻¹ᵁ V)) (f₁.app V a) = 0) :
     f₁.relativeDifferentials ≅ f₂.relativeDifferentials where
   hom := (f₁.relativeDifferentialsHomEquiv _).symm
@@ -272,7 +273,7 @@ variable {U : Scheme.{u}} (j : U ⟶ X)
 
 /-- The derivation `𝒪_X → j_* Ω¹_{U/S}`, `s ↦ d (j^♯ s)`. -/
 noncomputable def pushforwardDerivation :
-    ((Modules.pushforward j).obj (j ≫ f).relativeDifferentials).val.Derivation'
+    PresheafOfModulesOfCommRing.Derivation' ((Modules.pushforward j).obj (j ≫ f).relativeDifferentials).val
       f.pullbackPresheafToPresheaf :=
   f.derivationMk
     (fun {W} ↦ ((j ≫ f).relativeDifferentialsDerivation.d (X := op (j ⁻¹ᵁ W.unop))).comp
@@ -298,7 +299,7 @@ variable [IsOpenImmersion j]
 
 /-- The derivation `𝒪_U → Ω¹_{X/S}|_U`, `t ↦ d (t)` viewed as a section over `j(W)`. -/
 noncomputable def restrictDerivation :
-    (f.relativeDifferentials.restrict j).val.Derivation' (j ≫ f).pullbackPresheafToPresheaf :=
+    PresheafOfModulesOfCommRing.Derivation' (f.relativeDifferentials.restrict j).val (j ≫ f).pullbackPresheafToPresheaf :=
   (j ≫ f).derivationMk
     (fun {W} ↦ (f.relativeDifferentialsDerivation.d (X := op (j ''ᵁ W.unop))).comp
       (j.appIso W.unop).inv.hom.toAddMonoidHom)
@@ -401,7 +402,7 @@ section Affine
 by its values on global sections. -/
 lemma Scheme.Modules.derivation_ext_of_isAffine {X : Scheme.{u}} [IsAffine X]
     {R' : X.Opensᵒᵖ ⥤ CommRingCat.{u}} {φ : R' ⟶ X.presheaf} {N : X.Modules}
-    {D₁ D₂ : N.val.Derivation' φ} (h : ∀ a : Γ(X, ⊤), D₁.d (X := op ⊤) a = D₂.d a) :
+    {D₁ D₂ : PresheafOfModulesOfCommRing.Derivation' N.val φ} (h : ∀ a : Γ(X, ⊤), D₁.d (X := op ⊤) a = D₂.d a) :
     D₁ = D₂ := by
   ext W s
   refine TopCat.Sheaf.eq_of_locally_eq' ⟨N.presheaf, N.isSheaf⟩
@@ -478,7 +479,7 @@ noncomputable def tildeDerivationApp (W : (Spec S).Opens) :
 /-- The derivation `𝒪_{Spec S} → M^~` induced by an `R`-derivation `D : S → M`, relative to
 `Spec S ⟶ Spec R`. -/
 noncomputable def tildeDerivation :
-    (tilde M).val.Derivation' (Spec.map φ).pullbackPresheafToPresheaf :=
+    PresheafOfModulesOfCommRing.Derivation' (tilde M).val (Spec.map φ).pullbackPresheafToPresheaf :=
   (Spec.map φ).derivationMk (fun {W} ↦ tildeDerivationApp D W.unop)
     (fun {W} a b ↦ Subtype.ext (funext fun x ↦ derivationStalk_mul D x.1 (a.1 x) (b.1 x)))
     (fun {W₁ W₂} i s ↦ Subtype.ext (funext fun x ↦ rfl))
@@ -516,7 +517,7 @@ noncomputable def relativeDifferentialsSpecΓDerivation :
     (fun a ↦ by
       rw [← Scheme.specMap_appTop_ΓSpecIso_inv, ← Scheme.Hom.appLE_top_top_eq_appTop _ le_top,
         Scheme.Hom.appLE_eq_pullbackPresheafToPresheaf_app]
-      exact PresheafOfModules.Derivation'.d_app _ _)
+      exact PresheafOfModulesOfCommRing.Derivation'.d_app _ _)
 
 /-- For a ring map `φ : R ⟶ S`, the `S`-linear map `Ω_{S/R} → Γ(Spec S, Ω¹_{Spec S / Spec R})`
 sending `D b` to `d b`, given by the universal property of Kähler differentials. -/
