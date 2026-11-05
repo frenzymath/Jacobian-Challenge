@@ -1,0 +1,9 @@
+Jacobian Challenge
+Copyright 2026 Axel Delaval, Jie Xu, and Shitan Xu.
+
+Parts of this library are adapted from Weil's conjectures project, whose source
+notices specify the Apache License, Version 2.0. The adapted code has been
+reorganized, modified, and integrated into this library.
+
+This repository is distributed under the Apache License, Version 2.0.
+See LICENSE for the license terms.

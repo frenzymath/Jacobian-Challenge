@@ -1,0 +1,11 @@
+.lake/
+__pycache__/
+*.pyc
+AGENTS.md
+agent-tools/
+goals/
+memory/
+docs/
+workspace/
+.lake-clone/
+.lake-oldlink
