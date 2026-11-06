@@ -37,7 +37,8 @@ lake build Jacobian Solution
 lake build Challenge
 ```
 
-The toolchain and dependencies are pinned. The statement target is independent
+The project uses **Lean 4.35.0-rc3**, with the toolchain and Mathlib dependency
+pinned in `lean-toolchain` and `lakefile.toml`. The statement target is independent
 of the library and solution. Build logs, source inventories, and development
 notes are kept outside this package.
 
